@@ -19,8 +19,8 @@ Votre code est ensuite implémenter, compilé et exécuté à l'intérieur d'un 
 
 L'architecture est séparée en trois parties distinctes :
 
-1.  **`src/MoteurJeu.java`** : Le cœur du système. Il gère la carte, vérifie les collisions et gère la boucle de rendu en console.
-2.  **`src/Joueur.java`** : C'est votre espace de travail. Vous devez modifier la méthode `deplacer()` pour guider le personnage 'P' vers la sortie 'S'.
+1.  **`Src/MoteurJeu.java`** : Le cœur du système. Il gère la carte, vérifie les collisions et gère la boucle de rendu en console.
+2.  **`Src/Joueur.java`** : C'est votre espace de travail. Vous devez modifier la méthode `deplacer()` pour guider le personnage 'P' vers la sortie 'S'.
 3.  **`Dockerfile`** : La recette de cuisine qui définit l'environnement Linux/Java nécessaire pour compiler et lancer le défi.
 
 ## Installation et Lancement
@@ -30,7 +30,7 @@ L'architecture est séparée en trois parties distinctes :
 
 ### Étapes à suivre
 
-1. **Modifiez le fichier `src/Joueur.java`** sur votre machine hôte avec votre logique de déplacement.
+1. **Modifiez le fichier `Src/Joueur.java`** sur votre machine hôte avec votre logique de déplacement.
 2. **Construisez l'image** (cette étape compile votre code Java à l'intérieur du conteneur) :
    ```bash
    docker build -t labyrinthe-code .
