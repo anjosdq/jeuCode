@@ -33,4 +33,4 @@ L'architecture est séparée en trois parties distinctes :
 1. **Modifiez le fichier `src/Joueur.java`** sur votre machine hôte avec votre logique de déplacement.
 2. **Construisez l'image** (cette étape compile votre code Java à l'intérieur du conteneur) :
    ```bash
-   docker build -t labyrinthe-code .
+   docker build -t jeuCode .
