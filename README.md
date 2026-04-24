@@ -19,7 +19,7 @@ Votre code est ensuite implémenter, compilé et exécuté à l'intérieur d'un 
 
 L'architecture est séparée en trois parties distinctes :
 
-1.  **`src/MoteurJeu.java`** : Le cœur du système. Il gère la carte, vérifie les collisions et gère la boucle de rendu en console.
+1.  **`src/Labyrinthe.java`** : Le cœur du système. Il gère la carte, vérifie les collisions et gère la boucle de rendu en console.
 2.  **`src/Joueur.java`** : C'est votre espace de travail. Vous devez modifier la méthode `deplacer()` pour guider le personnage 'P' vers la sortie 'S'.
 3.  **`Dockerfile`** : La recette de cuisine qui définit l'environnement Linux/Java nécessaire pour compiler et lancer le défi.
 
