@@ -7,4 +7,4 @@ COPY src/ .
 
 RUN javac Labyrinthe.java Joueur.java
 
-CMD ["java", "MoteurJeu"]
+CMD ["java", "Labyrinthe"]
