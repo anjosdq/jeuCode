@@ -5,6 +5,6 @@ WORKDIR /app
 
 COPY src/ .
 
-RUN javac MoteurJeu.java Joueur.java
+RUN javac Labyrinthe.java Joueur.java
 
 CMD ["java", "MoteurJeu"]
