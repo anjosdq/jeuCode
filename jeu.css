@@ -1,0 +1,67 @@
+body {
+    margin: 0;
+    height: 100vh;
+
+    /* Image de fond */
+    background: url("background.jpg") no-repeat center center;
+    background-size: cover;
+
+    /* Assombrir légèrement */
+    background-color: rgba(0,0,0,0.5);
+    background-blend-mode: darken;
+}
+
+/* Icône GitHub */
+.github-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+
+    width: 60px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+/* Effet au survol */
+.github-icon:hover {
+    transform: scale(1.2);
+}
+.title {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    font-size: 60px;
+    color: #ff4da6; /* rose */
+
+    text-align: center;
+
+    /* style jeu */
+    text-shadow: 
+        0 0 10px #ff4da6,
+        0 0 20px #ff4da6,
+        0 0 40px #ff1a75;
+
+    letter-spacing: 3px;
+}
+.content {
+    text-align: center;
+    margin-top: 200px;
+    font-size: 20px;
+}
+
+/* bouton */
+.btn {
+    display: block;
+    width: 200px;
+    margin: 600px auto;
+    text-align: center;
+    padding: 15px;
+
+    background: #ff4da6;
+    color: white;
+    text-decoration: none;
+
+    border-radius: 10px;
+}
