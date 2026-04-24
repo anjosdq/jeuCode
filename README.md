@@ -34,3 +34,6 @@ L'architecture est séparée en trois parties distinctes :
 2. **Construisez l'image** (cette étape compile votre code Java à l'intérieur du conteneur) :
    ```bash
    docker build -t jeuCode .
+3. **Pour lancer le jeu :**
+   ```bash
+   docker run -it --rm jeucode
