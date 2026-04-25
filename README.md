@@ -6,7 +6,11 @@ Bienvenue dans ce projet de labyrinthe où la victoire ne dépend pas de vos ré
 
 Ce projet est un environnement de simulation. Contrairement à un jeu classique, vous ne contrôlez pas le personnage avec le clavier. Vous devez **implémenter un algorithme de résolution** dans une classe Java. 
 
-Votre code est ensuite implémenter, compilé et exécuté à l'intérieur d'un conteneur **Docker** qui fait tourner le moteur de jeu. C'est une excellente démonstration de la portabilité de Java combinée à la puissance d'isolation de Docker.
+Votre code est ensuite implémenter, compilé et exécuté à l'intérieur d'un conteneur **Docker** qui fait tourner le moteur de jeu. C'est une excellente démonstration de la portabilité de Java combinée à la puissance d'isolation de Docker. 
+
+## Objectif 
+
+Le programme du Labyrinthe  enchaîne automatiquement 3 niveaux de difficulté croissante. Votre classe Joueur.java doit être capable de trouver la sortie 'S' dans chaque configuration.
 
 ## L'équipe
 
