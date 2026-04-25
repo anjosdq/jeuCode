@@ -2,16 +2,15 @@ import java.util.Scanner;
 
 /**
  * Classe principale gérant la logique du labyrinthe et l'exécution du code joueur.
- * Ce labyrinhte permet de choisir entre 3 niveaux de difficulté.
+ * Ce labyrinthe enchaîne automatiquement 3 niveaux de difficulté.
  */
-public class Labyrinthe 
-{
-    // Variables de position du joueur
+public class Labyrinthe
+{  
     private static int playerX;
     private static int playerY;
     private static char[][] grilleActuelle;
 
-    // Grille simple : # = mur, . = chemin, S = sortie, P = personnage 
+    // Grille simple : # = mur, . = chemin, S = sortie, P = personnage
     private static char[][][] niveaux = {
         { // Niveau 1 : L'échauffement
             {'#', '#', '#', '#', '#', '#'},
@@ -35,51 +34,63 @@ public class Labyrinthe
 
     public static void main(String[] args) 
     {
-        int choixNiveau = 0; 
-        
-        // Initialisation de la grille pour le niveau choisi
-        grilleActuelle = copierGrille(niveaux[choixNiveau]);
-        trouverPositionDepart();
-
         Joueur monJoueur = new Joueur();
+        
+        System.out.println("======= BIENVENUE DANS JEUCODE =======");
+
+        // Boucle qui parcourt les niveaux un par un
+        for (int i = 0; i < niveaux.length; i++) 
+        {
+            System.out.println("\n CHARGEMENT DU NIVEAU " + (i + 1) + "...");
+            
+            grilleActuelle = copierGrille(niveaux[i]);
+            trouverPositionDepart();
+            
+            boolean niveauReussi = jouerNiveau(monJoueur);
+            
+            if (!niveauReussi) 
+            {
+                System.out.println("\n GAME OVER - Vous avez échoué au niveau " + (i + 1));
+                return; // Arrête tout le programme si un niveau échoue
+            }
+            
+            System.out.println("\n NIVEAU " + (i + 1) + " TERMINÉ !");
+            try { Thread.sleep(1500); } catch (InterruptedException e) {}
+        }
+
+        System.out.println("\n FÉLICITATIONS ! Vous avez terminé tous les niveaux !");
+    }
+
+    /**
+     * Gère la boucle de jeu pour un niveau spécifique
+     */
+    private static boolean jouerNiveau(Joueur joueur) 
+    {
         boolean gagne = false;
         int tours = 0;
+        int maxTours = 30;
 
-        System.out.println("--- Début de la simulation : Niveau " + (choixNiveau + 1) + " ---");
-
-        // Boucle de jeu 
-        while (!gagne && tours < 30) 
+        while (!gagne && tours < maxTours) 
         {
             afficherGrille();
             
-            String direction = monJoueur.deplacer(playerX, playerY, grilleActuelle);
+            String direction = joueur.deplacer(playerX, playerY, grilleActuelle);
             appliquerMouvement(direction);
 
-            // Vérification de la victoire (Case 'S')
             if (grilleActuelle[playerX][playerY] == 'S') 
             {
                 gagne = true;
                 afficherGrille();
-                System.out.println("\n✨ Félicitations ! Sortie trouvée en " + tours + " tours.");
             }
             tours++;
-            
-            // Petite pause pour l'affichage (optionnel)
-            try { Thread.sleep(300); } catch (InterruptedException e) {}
+            try { Thread.sleep(400); } catch (InterruptedException e) {}
         }
-
-        if (!gagne) 
-        {
-            System.out.println("\n Dommage ! Trop de tours ou personnage bloqué.");
-        }
+        return gagne;
     }
 
-    /**
-     * Affiche la grille dans la console avec le joueur 'P'
-     */
     private static void afficherGrille() 
     {
-        System.out.println("\nTour : " + playerX + "," + playerY);
+        System.out.println("\nPosition : [" + playerX + "," + playerY + "]");
         for (int i = 0; i < grilleActuelle.length; i++) 
         {
             for (int j = 0; j < grilleActuelle[i].length; j++) 
@@ -87,7 +98,9 @@ public class Labyrinthe
                 if (i == playerX && j == playerY && grilleActuelle[i][j] != 'S') 
                 {
                     System.out.print('P');
-                } else {
+                } 
+                else 
+                {
                     System.out.print(grilleActuelle[i][j]);
                 }
             }
@@ -95,35 +108,28 @@ public class Labyrinthe
         }
     }
 
-    /**
-     * Gère le déplacement et vérifie les collisions avec les murs '#'
-     */
     private static void appliquerMouvement(String dir) 
     {
         int nextX = playerX;
         int nextY = playerY;
 
-        switch (dir.toUpperCase()) {
+        switch (dir.toUpperCase()) 
+        {
             case "HAUT": nextX--; break;
             case "BAS": nextX++; break;
             case "GAUCHE": nextY--; break;
             case "DROITE": nextY++; break;
         }
 
-        // Vérification des limites et des murs
         if (nextX >= 0 && nextX < grilleActuelle.length && 
             nextY >= 0 && nextY < grilleActuelle[0].length &&
-            grilleActuelle[nextX][nextY] != '#') {
+            grilleActuelle[nextX][nextY] != '#') 
+        {
             playerX = nextX;
             playerY = nextY;
-        } else {
-            System.out.println("(!) Obstacle ou mur en direction : " + dir);
         }
     }
 
-    /**
-     * Cherche la position initiale du caractère 'P' dans la grille
-     */
     private static void trouverPositionDepart() 
     {
         for (int i = 0; i < grilleActuelle.length; i++) 
@@ -140,9 +146,6 @@ public class Labyrinthe
         }
     }
 
-    /**
-     * Copie la grille pour ne pas modifier l'originale
-     */
     private static char[][] copierGrille(char[][] source) 
     {
         char[][] destination = new char[source.length][source[0].length];
