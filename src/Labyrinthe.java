@@ -1,158 +1,178 @@
-import java.util.Scanner;
+import javax.swing.*;
+import java.awt.*;
 
-/**
- * Classe principale gérant la logique du labyrinthe et l'exécution du code joueur.
- * Ce labyrinthe enchaîne automatiquement 3 niveaux de difficulté.
- */
-public class Labyrinthe
-{  
-    private static int playerX;
-    private static int playerY;
-    private static char[][] grilleActuelle;
+public class LabyrintheGUI extends JFrame {
 
-    // Grille simple : # = mur, . = chemin, S = sortie, P = personnage
-    private static char[][][] niveaux = {
-        { // Niveau 1 : L'échauffement
-            {'#', '#', '#', '#', '#', '#'},
-            {'#', 'P', '.', '.', 'S', '#'},
-            {'#', '#', '#', '#', '#', '#'}
-        },
-        { // Niveau 2 : L'intermédiaire
-            {'#', '#', '#', '#', '#'},
-            {'#', 'P', '.', '#', '#'},
-            {'#', '#', '.', 'S', '#'},
-            {'#', '#', '#', '#', '#'}
-        },
-        { // Niveau 3 : Le boss final
-            {'#', '#', '#', '#', '#', '#', '#'},
-            {'#', 'P', '.', '.', '.', '#', '#'},
-            {'#', '#', '#', '#', '.', '.', '#'},
-            {'#', 'S', '.', '.', '.', '#', '#'},
-            {'#', '#', '#', '#', '#', '#', '#'}
-        }
-    };
+	int x, y;
+	int niveau = 0;
 
-    public static void main(String[] args) 
-    {
-        Joueur monJoueur = new Joueur();
-        
-        System.out.println("======= BIENVENUE DANS JEUCODE =======");
+	char[][][] niveaux = {
 
-        // Boucle qui parcourt les niveaux un par un
-        for (int i = 0; i < niveaux.length; i++) 
-        {
-            System.out.println("\n CHARGEMENT DU NIVEAU " + (i + 1) + "...");
-            
-            grilleActuelle = copierGrille(niveaux[i]);
-            trouverPositionDepart();
-            
-            boolean niveauReussi = jouerNiveau(monJoueur);
-            
-            if (!niveauReussi) 
-            {
-                System.out.println("\n GAME OVER - Vous avez échoué au niveau " + (i + 1));
-                return; // Arrête tout le programme si un niveau échoue
-            }
-            
-            System.out.println("\n NIVEAU " + (i + 1) + " TERMINÉ !");
-            try { Thread.sleep(1500); } catch (InterruptedException e) {}
-        }
+		{{'#','#','#','#','#','#'}, {'#','P','.','.','S','#'}, {'#','#','#','#','#','#'}},
 
-        System.out.println("\n FÉLICITATIONS ! Vous avez terminé tous les niveaux !");
-    }
+		{{'#','#','#','#','#','#','#'}, {'#','P','.','.','.','S','#'}, {'#','#','#','#','#','#','#'}},
 
-    /**
-     * Gère la boucle de jeu pour un niveau spécifique
-     */
-    private static boolean jouerNiveau(Joueur joueur) 
-    {
-        boolean gagne = false;
-        int tours = 0;
-        int maxTours = 30;
+		{{'#','#','#','#','#'}, {'#','P','.','#','#'}, {'#','#','.','S','#'}, {'#','#','#','#','#'}},
 
-        while (!gagne && tours < maxTours) 
-        {
-            afficherGrille();
-            
-            String direction = joueur.deplacer(playerX, playerY, grilleActuelle);
-            appliquerMouvement(direction);
+		{{'#','#','#','#','#','#'}, {'#','P','.','.','#','#'}, {'#','#','#','.','.','#'}, {'#','#','#','#','S','#'}},
 
-            if (grilleActuelle[playerX][playerY] == 'S') 
-            {
-                gagne = true;
-                afficherGrille();
-            }
-            tours++;
-            try { Thread.sleep(400); } catch (InterruptedException e) {}
-        }
-        return gagne;
-    }
+		{{'#','#','#','#','#','#','#'}, {'#','P','.','#','.','.','#'}, {'#','.','.','#','.','#','#'}, {'#','#','.','.','.','S','#'}},
 
-    private static void afficherGrille() 
-    {
-        System.out.println("\nPosition : [" + playerX + "," + playerY + "]");
-        for (int i = 0; i < grilleActuelle.length; i++) 
-        {
-            for (int j = 0; j < grilleActuelle[i].length; j++) 
-            {
-                if (i == playerX && j == playerY && grilleActuelle[i][j] != 'S') 
-                {
-                    System.out.print('P');
-                } 
-                else 
-                {
-                    System.out.print(grilleActuelle[i][j]);
-                }
-            }
-            System.out.println();
-        }
-    }
+		{{'#','#','#','#','#','#','#','#'}, {'#','P','.','.','#','.','.','#'}, {'#','#','#','.','#','.','#','#'}, {'#','.','.','.','.','.','S','#'}},
 
-    private static void appliquerMouvement(String dir) 
-    {
-        int nextX = playerX;
-        int nextY = playerY;
+		{{'#','#','#','#','#','#','#','#'}, {'#','P','.','#','.','.','.','#'}, {'#','.','.','#','#','#','.','#'}, {'#','.','#','.','.','.','S','#'}},
 
-        switch (dir.toUpperCase()) 
-        {
-            case "HAUT": nextX--; break;
-            case "BAS": nextX++; break;
-            case "GAUCHE": nextY--; break;
-            case "DROITE": nextY++; break;
-        }
+		{{'#','#','#','#','#','#','#','#','#'}, {'#','P','.','.','.','#','.','.','#'}, {'#','#','#','#','.','#','.','#','#'}, {'#','.','.','.','.','.','.','S','#'}},
 
-        if (nextX >= 0 && nextX < grilleActuelle.length && 
-            nextY >= 0 && nextY < grilleActuelle[0].length &&
-            grilleActuelle[nextX][nextY] != '#') 
-        {
-            playerX = nextX;
-            playerY = nextY;
-        }
-    }
+		{{'#','#','#','#','#','#','#','#','#','#'}, {'#','P','.','.','#','.','.','.','.','#'}, {'#','#','#','.','#','#','#','.','#','#'}, {'#','.','.','.','.','.','.','.','S','#'}, {'#','#','#','#','#','#','#','#','#','#'}}
+	};
 
-    private static void trouverPositionDepart() 
-    {
-        for (int i = 0; i < grilleActuelle.length; i++) 
-        {
-            for (int j = 0; j < grilleActuelle[i].length; j++) 
-            {
-                if (grilleActuelle[i][j] == 'P') 
-                {
-                    playerX = i;
-                    playerY = j;
-                    return;
-                }
-            }
-        }
-    }
+	char[][] grille;
 
-    private static char[][] copierGrille(char[][] source) 
-    {
-        char[][] destination = new char[source.length][source[0].length];
-        for (int i = 0; i < source.length; i++) 
-        {
-            System.arraycopy(source[i], 0, destination[i], 0, source[i].length);
-        }
-        return destination;
-    }
+	JTextArea zoneCode;
+	JPanel panel;
+
+	public LabyrintheGUI() {
+
+		setTitle("Labyrinthe");
+		setSize(600,600);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setLayout(new BorderLayout());
+
+		zoneCode = new JTextArea();
+		add(zoneCode, BorderLayout.SOUTH);
+
+		JButton bouton = new JButton("Executer");
+		add(bouton, BorderLayout.NORTH);
+
+		panel = new JPanel() { //Cette méthode est appelée automatiquement pour dessiner
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				dessiner(g);
+			}
+		};
+
+		add(panel, BorderLayout.CENTER);
+
+		chargerNiveau();
+
+		bouton.addActionListener(e -> executer());
+
+		setVisible(true);
+	}
+
+	void chargerNiveau() {
+		grille = copier(niveaux[niveau]);
+		trouverDepart();
+	}
+
+   void dessiner(Graphics g) { // Je dessine le labyrinthe case par case
+
+	int taille = 40;
+
+	for (int i = 0; i < grille.length; i++) {
+		for (int j = 0; j < grille[i].length; j++) {
+
+			if (grille[i][j] == '#') {
+				g.setColor(Color.PINK); // mur
+			}
+			else if (grille[i][j] == 'S') {
+				g.setColor(Color.GREEN); // sortie
+			}
+			else {
+				g.setColor(Color.WHITE); // sol
+			}
+
+			g.fillRect(j * taille, i * taille, taille, taille); //C’est une méthode pour dessiner un rectangle rempli
+
+			g.setColor(Color.BLACK);
+			g.drawRect(j * taille, i * taille, taille, taille);//Dessine le contour
+		}
+	}
+
+	// joueur
+	g.setColor(Color.MAGENTA);
+	g.fillOval(y * taille + 10, x * taille + 10, 20, 20); //Je dessine un cercle pour représenter le joueur
+}
+
+
+	void executer() {
+
+		String[] lignes = zoneCode.getText().toUpperCase().split("\\n");//découpe le texte ligne par ligne
+
+		new Thread(() -> {
+
+			for (String ligne : lignes) {
+
+				deplacer(ligne.trim());
+
+				panel.repaint();
+
+				if (grille[x][y] == 'S') {
+					JOptionPane.showMessageDialog(this, "Niveau réussi !");
+					niveau++;
+
+					if (niveau == niveaux.length) {
+						JOptionPane.showMessageDialog(this, "Bravo tu as fini !");
+						return;
+					}
+
+					chargerNiveau();
+					panel.repaint();
+					return;
+				}
+
+				try { Thread.sleep(300); } catch(Exception e){}
+			}
+
+		}).start();
+	}
+
+	void deplacer(String dir) {
+
+		int nx = x;
+		int ny = y;
+
+		if (dir.equals("HAUT")) nx--;
+		if (dir.equals("BAS")) nx++;
+		if (dir.equals("GAUCHE")) ny--;
+		if (dir.equals("DROITE")) ny++;
+
+		if (nx >= 0 && nx < grille.length && ny >= 0 && ny < grille[0].length) {
+			if (grille[nx][ny] != '#') {
+				x = nx;
+				y = ny;
+			}
+		}
+	}
+
+	void trouverDepart() {
+
+		for (int i = 0; i < grille.length; i++) {
+			for (int j = 0; j < grille[i].length; j++) {
+
+				if (grille[i][j] == 'P') {
+					x = i;
+					y = j;
+				}
+			}
+		}
+	}
+
+	char[][] copier(char[][] src) {
+
+		char[][] dest = new char[src.length][src[0].length];
+
+		for (int i = 0; i < src.length; i++) {
+			for (int j = 0; j < src[i].length; j++) {
+				dest[i][j] = src[i][j];
+			}
+		}
+
+		return dest;
+	}
+
+	public static void main(String[] args) {
+		new LabyrintheGUI();
+	}
 }
