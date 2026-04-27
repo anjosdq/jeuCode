@@ -1,4 +1,4 @@
-# SAE : Labyrinthe Code-Challenge Java
+# SAE : Labyrinthe Code-Java docker-sae203
 
 Bienvenue dans ce projet de labyrinthe où la victoire ne dépend pas de vos réflexes, mais de votre capacité à **coder** !
 
