@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Attrape Souris - Générateur Aléatoire</title>
+    <link rel="stylesheet" href="jeu.css">
+    <style>
+        /* Styles supplémentaires pour garantir que les boutons restent visibles */
+        #game-container { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            width: 100%;
+            min-height: 100vh;
+        }
+        
+        #maze { 
+            display: grid; 
+            gap: 2px; 
+            background: #444; 
+            border: 5px solid #ff4da6; 
+            padding: 5px; 
+            border-radius: 15px;
+            margin: 20px auto;
+        }
+        
+        .cell { 
+            width: 50px; 
+            height: 50px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 30px; 
+            background: white; 
+            border-radius: 8px; 
+            transition: all 0.1s ease; 
+        }
+        
+        .wall { 
+            background: #78c2ad; 
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.2); 
+        }
+        
+        .exit { 
+            background: #ffce67; 
+        }
+        
+        #ui { 
+            margin-top: 20px; 
+            text-align: center; 
+            color: white; 
+            background: rgba(0,0,0,0.5); 
+            padding: 10px 20px; 
+            border-radius: 30px; 
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+        
+        .main-nav { 
+            margin-top: 20px; 
+            text-align: center; 
+            width: 100%;
+            z-index: 10;
+            position: relative;
+        }
+        
+        .btn { 
+            background: rgba(255,255,255,0.9); 
+            color: #ff4da6; 
+            border: 3px solid #ff4da6; 
+            padding: 10px 25px; 
+            border-radius: 40px; 
+            text-decoration: none; 
+            font-weight: bold; 
+            transition: 0.2s; 
+            display: inline-block; 
+            margin: 5px 10px; 
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .btn:hover { 
+            background: #ff4da6; 
+            color: white; 
+            transform: scale(1.05); 
+        }
+        
+        .btn-retour { 
+            background: rgba(255,255,255,0.9); 
+            color: #666; 
+            border-color: #999; 
+        }
+        
+        .btn-retour:hover { 
+            background: #999; 
+            color: white; 
+            border-color: #999; 
+        }
+        
+        .info-message { 
+            color: #ffcc00; 
+            font-size: 0.9rem; 
+            margin-top: 10px; 
+            text-shadow: 1px 1px 0 black; 
+        }
+        
+        .button-group { 
+            display: flex; 
+            justify-content: center; 
+            gap: 15px; 
+            margin-top: 10px; 
+            flex-wrap: wrap; 
+        }
+        
+        /* Protection contre la disparition des boutons */
+        .main-nav .btn,
+        .button-group .btn {
+            opacity: 1 !important;
+            visibility: visible !important;
+            display: inline-block !important;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 class="title">🐭 Attrape Souris 🐱</h1>
+
+    <div id="game-container">
+        <div id="ui">
+            <h2>🏆 Niveau : <span id="lvl-display">1</span> | 🧀 Score : <span id="score-display">0</span></h2>
+            <p class="info-message">✨ Génération aléatoire à chaque niveau ✨</p>
+        </div>
+        
+        <div id="maze"></div>
+
+        <div class="main-nav">
+            <p style="color: #ff4da6; font-weight: bold;">⬆️ ⬇️ ⬅️ ➡️  -  Évite le chat et attrape la souris !</p>
+            <div class="button-group" id="button-group">
+                <a href="index.html" class="btn btn-retour" id="back-home">🏠 Retour à l'Accueil</a>
+                <button id="reset-game" class="btn">🔄 Nouvelle Partie</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========================
+        // GÉNÉRATEUR DE LABYRINTHE PROCÉDURAL
+        // ========================
+        
+        let currentLevel = 0;
+        let score = 0;
+        let playerPos = { x: 0, y: 0 };
+        let cats = [];
+        let grid = [];
+        let cheesePos = null;
+        let mousePos = { x: 0, y: 0 };
+        
+        function generateMaze(width, height) {
+            let maze = Array(height).fill().map(() => Array(width).fill('#'));
+            
+            let gridH = Math.floor((height - 2) / 2);
+            let gridW = Math.floor((width - 2) / 2);
+            if (gridH < 2) gridH = 2;
+            if (gridW < 2) gridW = 2;
+            
+            let cells = Array(gridH).fill().map(() => Array(gridW).fill(false));
+            
+            function carvePassages(cx, cy) {
+                const dirs = [[0, -1], [1, 0], [0, 1], [-1, 0]];
+                for (let i = dirs.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [dirs[i], dirs[j]] = [dirs[j], dirs[i]];
+                }
+                
+                for (let [dx, dy] of dirs) {
+                    let nx = cx + dx;
+                    let ny = cy + dy;
+                    if (nx >= 0 && nx < gridW && ny >= 0 && ny < gridH && !cells[ny][nx]) {
+                        cells[ny][nx] = true;
+                        let wallX = cx * 2 + 1 + dx;
+                        let wallY = cy * 2 + 1 + dy;
+                        if (wallY >= 0 && wallY < height && wallX >= 0 && wallX < width) {
+                            maze[wallY][wallX] = '.';
+                        }
+                        let cellX = cx * 2 + 1;
+                        let cellY = cy * 2 + 1;
+                        maze[cellY][cellX] = '.';
+                        carvePassages(nx, ny);
+                    }
+                }
+            }
+            
+            let startCX = Math.floor(Math.random() * gridW);
+            let startCY = Math.floor(Math.random() * gridH);
+            cells[startCY][startCX] = true;
+            let startCellX = startCX * 2 + 1;
+            let startCellY = startCY * 2 + 1;
+            maze[startCellY][startCellX] = '.';
+            carvePassages(startCX, startCY);
+            
+            for (let y = 0; y < height; y++) {
+                maze[y][0] = '#';
+                maze[y][width-1] = '#';
+            }
+            for (let x = 0; x < width; x++) {
+                maze[0][x] = '#';
+                maze[height-1][x] = '#';
+            }
+            
+            for (let y = 1; y < height-1; y++) {
+                for (let x = 1; x < width-1; x++) {
+                    if (maze[y][x] !== '#') {
+                        maze[y][x] = '.';
+                    } else {
+                        let adj = 0;
+                        if (maze[y-1][x] === '.') adj++;
+                        if (maze[y+1][x] === '.') adj++;
+                        if (maze[y][x-1] === '.') adj++;
+                        if (maze[y][x+1] === '.') adj++;
+                        if (adj >= 2 && Math.random() < 0.3) {
+                            maze[y][x] = '.';
+                        }
+                    }
+                }
+            }
+            
+            return maze;
+        }
+        
+        function placeEntities(maze) {
+            let height = maze.length;
+            let width = maze[0].length;
+            
+            let freeSpots = [];
+            for (let r = 0; r < height; r++) {
+                for (let c = 0; c < width; c++) {
+                    if (maze[r][c] === '.') {
+                        freeSpots.push({r, c});
+                    }
+                }
+            }
+            
+            if (freeSpots.length < 4) {
+                for (let r = 1; r < height-1; r++) {
+                    for (let c = 1; c < width-1; c++) {
+                        if (maze[r][c] === '#') {
+                            maze[r][c] = '.';
+                        }
+                        freeSpots.push({r, c});
+                    }
+                }
+            }
+            
+            for (let i = freeSpots.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [freeSpots[i], freeSpots[j]] = [freeSpots[j], freeSpots[i]];
+            }
+            
+            let playerSpot = freeSpots[0];
+            maze[playerSpot.r][playerSpot.c] = 'P';
+            playerPos = {r: playerSpot.r, c: playerSpot.c};
+            
+            let exitSpot = freeSpots[1];
+            maze[exitSpot.r][exitSpot.c] = 'S';
+            mousePos = {r: exitSpot.r, c: exitSpot.c};
+            
+            let catSpot = freeSpots[2];
+            maze[catSpot.r][catSpot.c] = 'C';
+            cats = [{r: catSpot.r, c: catSpot.c}];
+            
+            cheesePos = null;
+            if (freeSpots.length > 3) {
+                let cheeseSpot = freeSpots[3];
+                maze[cheeseSpot.r][cheeseSpot.c] = 'M';
+                cheesePos = {r: cheeseSpot.r, c: cheeseSpot.c};
+            }
+            
+            let dist = Math.abs(playerPos.r - catSpot.r) + Math.abs(playerPos.c - catSpot.c);
+            if (dist < 3 && freeSpots.length > 4) {
+                let newCatSpot = freeSpots[4];
+                maze[catSpot.r][catSpot.c] = '.';
+                maze[newCatSpot.r][newCatSpot.c] = 'C';
+                cats = [{r: newCatSpot.r, c: newCatSpot.c}];
+            }
+            
+            return maze;
+        }
+        
+        function generateRandomLevel(levelIndex) {
+            let baseSize = 9 + Math.min(levelIndex, 8);
+            let variation = Math.floor(Math.random() * 3) - 1;
+            let width = Math.min(19, Math.max(9, baseSize + variation));
+            let height = Math.min(15, Math.max(7, baseSize - variation + (levelIndex % 2)));
+            
+            if (width % 2 === 0) width++;
+            if (height % 2 === 0) height++;
+            
+            let newMaze = generateMaze(width, height);
+            
+            let dotCount = 0;
+            for (let row of newMaze) {
+                for (let cell of row) {
+                    if (cell === '.') dotCount++;
+                }
+            }
+            
+            if (dotCount < 15) {
+                newMaze = generateMaze(width, height);
+            }
+            
+            newMaze = placeEntities(newMaze);
+            
+            return newMaze;
+        }
+        
+        function resetGame() {
+            currentLevel = 0;
+            score = 0;
+            initLevel();
+        }
+        
+        function initLevel() {
+            let newGrid = generateRandomLevel(currentLevel);
+            grid = newGrid;
+            
+            cats = [];
+            for (let r = 0; r < grid.length; r++) {
+                for (let c = 0; c < grid[r].length; c++) {
+                    if (grid[r][c] === 'P') {
+                        playerPos = {r, c};
+                        grid[r][c] = '.';
+                    }
+                    if (grid[r][c] === 'C') {
+                        cats.push({r, c});
+                    }
+                    if (grid[r][c] === 'S') {
+                        mousePos = {r, c};
+                    }
+                    if (grid[r][c] === 'M') {
+                        cheesePos = {r, c};
+                    }
+                }
+            }
+            draw();
+        }
+        
+        function draw() {
+            const mazeDiv = document.getElementById('maze');
+            if (!grid.length) return;
+            mazeDiv.style.gridTemplateColumns = `repeat(${grid[0].length}, 50px)`;
+            mazeDiv.innerHTML = '';
+            
+            for (let r = 0; r < grid.length; r++) {
+                for (let c = 0; c < grid[r].length; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    
+                    let content = '';
+                    let isWall = (grid[r][c] === '#');
+                    
+                    if (isWall) {
+                        cell.classList.add('wall');
+                        content = '';
+                    } else if (grid[r][c] === 'S') {
+                        cell.classList.add('exit');
+                        content = '🏁';
+                    } else if (grid[r][c] === 'M') {
+                        content = '🧀';
+                    } else if (grid[r][c] === 'C') {
+                        content = '🐱';
+                    } else if (grid[r][c] === '.') {
+                        content = '';
+                    }
+                    
+                    if (r === playerPos.r && c === playerPos.c) {
+                        content = '🐭';
+                        cell.style.background = '#fff7b0';
+                    } else if (cats.some(cat => cat.r === r && cat.c === c)) {
+                        content = '🐱';
+                        cell.style.background = '#ffccbb';
+                    } else if (grid[r][c] === 'S') {
+                        content = '🏁';
+                    } else if (grid[r][c] === 'M') {
+                        content = '🧀';
+                    }
+                    
+                    cell.innerText = content;
+                    
+                    if (!isWall && !(r === playerPos.r && c === playerPos.c) && !cats.some(cat => cat.r === r && cat.c === c) && grid[r][c] !== 'S' && grid[r][c] !== 'M') {
+                        cell.style.background = 'rgba(255,255,240,0.9)';
+                    } else if (isWall) {
+                        cell.style.background = '#78c2ad';
+                    } else if (grid[r][c] === 'S') {
+                        cell.style.background = '#ffce67';
+                    }
+                    
+                    mazeDiv.appendChild(cell);
+                }
+            }
+            
+            document.getElementById('lvl-display').innerText = currentLevel + 1;
+            document.getElementById('score-display').innerText = score;
+        }
+        
+        function moveCats() {
+            let newCats = [];
+            
+            for (let cat of cats) {
+                let dr = 0, dc = 0;
+                let chase = Math.random() < 0.7;
+                
+                if (chase) {
+                    let diffRow = playerPos.r - cat.r;
+                    let diffCol = playerPos.c - cat.c;
+                    let possibleMoves = [];
+                    
+                    if (diffRow !== 0) possibleMoves.push({r: Math.sign(diffRow), c: 0});
+                    if (diffCol !== 0) possibleMoves.push({r: 0, c: Math.sign(diffCol)});
+                    
+                    if (possibleMoves.length > 0) {
+                        let chosen = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+                        dr = chosen.r;
+                        dc = chosen.c;
+                    }
+                } else {
+                    const dirs = [{r:1,c:0}, {r:-1,c:0}, {r:0,c:1}, {r:0,c:-1}];
+                    const d = dirs[Math.floor(Math.random() * dirs.length)];
+                    dr = d.r;
+                    dc = d.c;
+                }
+                
+                let nr = cat.r + dr;
+                let nc = cat.c + dc;
+                
+                if (nr >= 0 && nr < grid.length && nc >= 0 && nc < grid[0].length && grid[nr][nc] !== '#') {
+                    if (grid[nr][nc] === 'S') {
+                        const dirs2 = [{r:1,c:0}, {r:-1,c:0}, {r:0,c:1}, {r:0,c:-1}];
+                        for (let alt of dirs2) {
+                            let altR = cat.r + alt.r;
+                            let altC = cat.c + alt.c;
+                            if (altR >= 0 && altR < grid.length && altC >= 0 && altC < grid[0].length && grid[altR][altC] !== '#' && !(altR === mousePos.r && altC === mousePos.c)) {
+                                nr = altR;
+                                nc = altC;
+                                break;
+                            }
+                        }
+                        if (grid[nr][nc] === 'S') {
+                            nr = cat.r;
+                        }
+                    }
+                    
+                    if (grid[cat.r][cat.c] !== 'S' && grid[cat.r][cat.c] !== 'M') {
+                        grid[cat.r][cat.c] = '.';
+                    }
+                    
+                    cat.r = nr;
+                    cat.c = nc;
+                    
+                    if (grid[nr][nc] !== 'S' && grid[nr][nc] !== 'M') {
+                        grid[nr][nc] = 'C';
+                    }
+                    newCats.push(cat);
+                } else {
+                    newCats.push(cat);
+                }
+            }
+            
+            cats = newCats;
+            
+            for (let r = 0; r < grid.length; r++) {
+                for (let c = 0; c < grid[0].length; c++) {
+                    if (grid[r][c] === 'C' && !cats.some(cat => cat.r === r && cat.c === c)) {
+                        if (grid[r][c] !== 'S' && grid[r][c] !== 'M') {
+                            grid[r][c] = '.';
+                        }
+                    }
+                }
+            }
+            
+            cats.forEach(cat => {
+                if (grid[cat.r][cat.c] !== 'S' && grid[cat.r][cat.c] !== 'M') {
+                    grid[cat.r][cat.c] = 'C';
+                }
+            });
+        }
+        
+        function checkCollision() {
+            if (cats.some(cat => cat.r === playerPos.r && cat.c === playerPos.c)) {
+                alert("😿 Le chat vous a attrapé ! Retour au début du niveau... 😿");
+                initLevel();
+                return true;
+            }
+            return false;
+        }
+        
+        function movePlayer(dr, dc) {
+            let nr = playerPos.r + dr;
+            let nc = playerPos.c + dc;
+            
+            if (nr < 0 || nr >= grid.length || nc < 0 || nc >= grid[0].length) return;
+            if (grid[nr][nc] === '#') return;
+            
+            let oldR = playerPos.r, oldC = playerPos.c;
+            playerPos = {r: nr, c: nc};
+            
+            if (grid[nr][nc] === 'M') {
+                score++;
+                grid[nr][nc] = '.';
+                cheesePos = null;
+            }
+            
+            if (grid[nr][nc] === 'S') {
+                alert(`🎉 Niveau ${currentLevel+1} réussi ! +10 points bonus ! 🎉`);
+                score += 10;
+                currentLevel++;
+                initLevel();
+                draw();
+                return;
+            }
+            
+            if (grid[oldR][oldC] !== 'S' && grid[oldR][oldC] !== 'M' && grid[oldR][oldC] !== 'C') {
+                grid[oldR][oldC] = '.';
+            }
+            
+            moveCats();
+            let collision = checkCollision();
+            
+            if (collision) {
+                draw();
+                return;
+            }
+            
+            draw();
+            
+            if (!cheesePos && Math.random() < 0.15 && currentLevel > 0) {
+                let freePos = [];
+                for (let r = 0; r < grid.length; r++) {
+                    for (let c = 0; c < grid[0].length; c++) {
+                        if (grid[r][c] === '.' && !(r === playerPos.r && c === playerPos.c) && !cats.some(cat => cat.r === r && cat.c === c) && !(r === mousePos.r && c === mousePos.c)) {
+                            freePos.push({r, c});
+                        }
+                    }
+                }
+                if (freePos.length > 0) {
+                    let rand = freePos[Math.floor(Math.random() * freePos.length)];
+                    grid[rand.r][rand.c] = 'M';
+                    cheesePos = rand;
+                    draw();
+                }
+            }
+        }
+        
+        window.addEventListener('keydown', (e) => {
+            if (e.key === "ArrowUp") movePlayer(-1, 0);
+            if (e.key === "ArrowDown") movePlayer(1, 0);
+            if (e.key === "ArrowLeft") movePlayer(0, -1);
+            if (e.key === "ArrowRight") movePlayer(0, 1);
+            e.preventDefault();
+        });
+        
+        // Vérifier que les boutons existent avant d'ajouter l'événement
+        const resetBtn = document.getElementById('reset-game');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                if (confirm("🔄 Voulez-vous vraiment recommencer une nouvelle partie ? Votre progression actuelle sera perdue.")) {
+                    resetGame();
+                }
+            });
+        }
+        
+        function startGame() {
+            currentLevel = 0;
+            score = 0;
+            initLevel();
+        }
+        
+        startGame();
+    </script>
+</body>
+</html>
