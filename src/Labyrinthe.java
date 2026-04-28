@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-public class LabyrintheGUI extends JFrame {
+public class Labyrinthe extends JFrame {
 
     int x;
     int y;
@@ -34,49 +34,45 @@ public class LabyrintheGUI extends JFrame {
     JTextArea zoneCode;
     JPanel panel;
 
-    public LabyrintheGUI() {
+    public Labyrinthe() {
 
-        setTitle("Labyrinthe");
-        setSize(600, 600);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+        this.setTitle("Labyrinthe");
+        this.setSize(600, 600);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setLayout(new BorderLayout());
 
-        // zone pour écrire les commandes
-        zoneCode = new JTextArea();
-        add(zoneCode, BorderLayout.SOUTH);
+        this.zoneCode = new JTextArea();
+        this.add(this.zoneCode, BorderLayout.SOUTH);
 
-        // bouton exécuter
         JButton bouton = new JButton("Executer");
-        add(bouton, BorderLayout.NORTH);
+        this.add(bouton, BorderLayout.NORTH);
 
-        // panel pour dessiner
-        panel = new JPanel() {
+        this.panel = new JPanel() {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 dessiner(g);
             }
         };
 
-        add(panel, BorderLayout.CENTER);
+        this.add(this.panel, BorderLayout.CENTER);
 
-        chargerNiveau();
+        this.chargerNiveau();
 
-        // action du bouton (version simple)
         bouton.addActionListener(new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 executer();
             }
         });
 
-        setupKeyBindings();
+        this.setupKeyBindings();
 
-        setVisible(true);
+        this.setVisible(true);
     }
 
     void setupKeyBindings() {
 
-        InputMap im = panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        ActionMap am = panel.getActionMap();
+        InputMap im = this.panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap am = this.panel.getActionMap();
 
         im.put(KeyStroke.getKeyStroke("UP"), "haut");
         im.put(KeyStroke.getKeyStroke("DOWN"), "bas");
@@ -110,41 +106,40 @@ public class LabyrintheGUI extends JFrame {
 
     void jouer(String direction) {
 
-        deplacer(direction);
-        panel.repaint();
+        this.deplacer(direction);
+        this.panel.repaint();
 
-        // si on atteint la sortie
-        if (grille[x][y] == 'S') {
+        if (this.grille[this.x][this.y] == 'S') {
 
             JOptionPane.showMessageDialog(this, "Niveau réussi !");
-            niveau = niveau + 1;
+            this.niveau = this.niveau + 1;
 
-            if (niveau == niveaux.length) {
+            if (this.niveau == this.niveaux.length) {
                 JOptionPane.showMessageDialog(this, "Bravo tu as fini !");
                 return;
             }
 
-            chargerNiveau();
-            panel.repaint();
+            this.chargerNiveau();
+            this.panel.repaint();
         }
     }
 
     void chargerNiveau() {
-        grille = copier(niveaux[niveau]);
-        trouverDepart();
+        this.grille = this.copier(this.niveaux[this.niveau]);
+        this.trouverDepart();
     }
 
     void dessiner(Graphics g) {
 
         int taille = 40;
 
-        for (int i = 0; i < grille.length; i++) {
-            for (int j = 0; j < grille[i].length; j++) {
+        for (int i = 0; i < this.grille.length; i++) {
+            for (int j = 0; j < this.grille[i].length; j++) {
 
-                if (grille[i][j] == '#') {
+                if (this.grille[i][j] == '#') {
                     g.setColor(Color.PINK);
                 }
-                else if (grille[i][j] == 'S') {
+                else if (this.grille[i][j] == 'S') {
                     g.setColor(Color.GREEN);
                 }
                 else {
@@ -158,17 +153,15 @@ public class LabyrintheGUI extends JFrame {
             }
         }
 
-        // joueur
         g.setColor(Color.MAGENTA);
-        g.fillOval(y * taille + 10, x * taille + 10, 20, 20);
+        g.fillOval(this.y * taille + 10, this.x * taille + 10, 20, 20);
     }
 
     void executer() {
 
-        String texte = zoneCode.getText().toUpperCase();
+        String texte = this.zoneCode.getText().toUpperCase();
         String[] lignes = texte.split("\\n");
 
-        // thread simple
         Thread t = new Thread(new Runnable() {
             public void run() {
 
@@ -208,8 +201,8 @@ public class LabyrintheGUI extends JFrame {
 
     void deplacer(String dir) {
 
-        int nx = x;
-        int ny = y;
+        int nx = this.x;
+        int ny = this.y;
 
         if (dir.equals("HAUT")) {
             nx = nx - 1;
@@ -224,24 +217,23 @@ public class LabyrintheGUI extends JFrame {
             ny = ny + 1;
         }
 
-        // vérifier limites
-        if (nx >= 0 && nx < grille.length && ny >= 0 && ny < grille[0].length) {
+        if (nx >= 0 && nx < this.grille.length && ny >= 0 && ny < this.grille[0].length) {
 
-            if (grille[nx][ny] != '#') {
-                x = nx;
-                y = ny;
+            if (this.grille[nx][ny] != '#') {
+                this.x = nx;
+                this.y = ny;
             }
         }
     }
 
     void trouverDepart() {
 
-        for (int i = 0; i < grille.length; i++) {
-            for (int j = 0; j < grille[i].length; j++) {
+        for (int i = 0; i < this.grille.length; i++) {
+            for (int j = 0; j < this.grille[i].length; j++) {
 
-                if (grille[i][j] == 'P') {
-                    x = i;
-                    y = j;
+                if (this.grille[i][j] == 'P') {
+                    this.x = i;
+                    this.y = j;
                 }
             }
         }
@@ -261,6 +253,6 @@ public class LabyrintheGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        new LabyrintheGUI();
+        new Labyrinthe();
     }
 }
