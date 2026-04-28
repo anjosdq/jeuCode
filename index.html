@@ -1,24 +1,85 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-	<meta charset="UTF-8">
-	<title>Attrape Souris - Accueil</title>
-	<link rel="stylesheet" href="jeu.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attrape Souris - Accueil</title>
+    <link rel="stylesheet" href="jeu.css">
+    <style>
+        .hero {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.9);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Fil d'Ariane */
+        .breadcrumb {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            z-index: 100;
+            border: 1px solid rgba(255,77,166,0.4);
+        }
+
+        .breadcrumb a {
+            color: #ff4da6;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: white;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .btn-large {
+            width: 280px;
+            padding: 18px;
+            font-size: 1.3rem;
+        }
+    </style>
 </head>
 <body>
-	<h1 class="title">Attrape Souris</h1>
-    
-	<div class="main-nav">
-		<a href="jeu.html" class="btn" style="margin-bottom: 20px;">🎮 JOUER</a>
-        
-		<a href="regles.html" class="btn">📜 Voir les règles</a>
-        
-		<p style="color: white; margin-top: 30px; font-family: sans-serif; opacity: 0.8; text-shadow: 1px 1px 2px black;">
-		</p>
-	</div>
 
-	<a href="https://github.com/anjosdq/jeuCode" target="_blank">
-		<img src="github.png" class="github-icon" alt="GitHub">
-	</a>
+    <!-- Fil d'Ariane -->
+    <div class="breadcrumb">
+        📍 <a href="index.html">Accueil</a> <span>/</span> <span style="color:#ff4da6;">🏠 Vous êtes ici</span>
+    </div>
+
+    <div class="hero">
+        <h1 class="title">🐭 Attrape Souris 🐱</h1>
+        <p>Prouvez votre agilité et échappez au chat dans des labyrinthes générés aléatoirement !</p>
+    </div>
+
+    <div class="nav-buttons">
+        <a href="jeu.html" class="btn btn-large">🎮 JOUER</a>
+        <a href="regles.html" class="btn btn-large">📜 RÈGLES</a>
+        <a href="docker.html" class="btn btn-large">🐳 DOCKER</a>
+    </div>
+
+    <a href="https://github.com/anjosdq/jeuCode" target="_blank" class="github-link">
+        <img src="github.png" class="github-icon" alt="GitHub">
+    </a>
+
 </body>
 </html>
