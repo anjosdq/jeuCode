@@ -1,4 +1,4 @@
-FROM openjdk:24-jdk-slim
+FROM openjdk:25-jdk-slim
 
 #  Installation des bibliothèques pour l'affichage graphique
 RUN apt-get update && apt-get install -y \
