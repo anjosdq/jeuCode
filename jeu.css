@@ -1,67 +1,98 @@
+/* --- Fond général --- */
 body {
     margin: 0;
     height: 100vh;
 
-    /* Image de fond */
     background: url("background.jpg") no-repeat center center;
     background-size: cover;
 
-    /* Assombrir légèrement */
-    background-color: rgba(0,0,0,0.5);
+    /* Assombrissement + flou léger */
+    background-color: rgba(0, 0, 0, 0.45);
     background-blend-mode: darken;
+    backdrop-filter: blur(2px);
+
+    font-family: "Trebuchet MS", sans-serif;
 }
 
-/* Icône GitHub */
-.github-icon {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-
-    width: 60px;
-    cursor: pointer;
-    transition: transform 0.3s;
-}
-
-/* Effet au survol */
-.github-icon:hover {
-    transform: scale(1.2);
-}
+/* --- Titre principal --- */
 .title {
     position: absolute;
-    top: 40%;
+    top: 35%;
     left: 50%;
     transform: translate(-50%, -50%);
 
-    font-size: 60px;
-    color: #ff4da6; /* rose */
+    font-size: 70px;
+    color: #ff4da6;
 
     text-align: center;
+    letter-spacing: 4px;
 
-    /* style jeu */
-    text-shadow: 
+    /* Effet néon amélioré */
+    text-shadow:
         0 0 10px #ff4da6,
         0 0 20px #ff4da6,
-        0 0 40px #ff1a75;
+        0 0 40px #ff1a75,
+        0 0 80px #ff1a75;
 
-    letter-spacing: 3px;
+    animation: pulse 2.5s infinite ease-in-out;
 }
+
+/* Animation douce du néon */
+@keyframes pulse {
+    0% { text-shadow: 0 0 10px #ff4da6, 0 0 20px #ff4da6, 0 0 40px #ff1a75; }
+    50% { text-shadow: 0 0 20px #ff4da6, 0 0 40px #ff1a75, 0 0 80px #ff1a75; }
+    100% { text-shadow: 0 0 10px #ff4da6, 0 0 20px #ff4da6, 0 0 40px #ff1a75; }
+}
+
+/* --- Icône GitHub --- */
+.github-icon {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+
+    width: 65px;
+    cursor: pointer;
+
+    filter: drop-shadow(0 0 5px #000);
+    transition: transform 0.3s, filter 0.3s;
+}
+
+.github-icon:hover {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 10px #fff);
+}
+
+/* --- Bouton --- */
+.btn {
+    display: block;
+    width: 230px;
+
+    margin: 550px auto 0 auto;
+    padding: 15px;
+
+    text-align: center;
+    text-decoration: none;
+
+    background: linear-gradient(135deg, #ff4da6, #ff1a75);
+    color: white;
+    font-size: 22px;
+
+    border-radius: 15px;
+    box-shadow: 0 0 10px #ff4da6aa;
+
+    transition: 0.3s;
+}
+
+.btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px #ff1a75cc;
+}
+
+/* --- Texte éventuel sous le titre --- */
 .content {
     text-align: center;
     margin-top: 200px;
-    font-size: 20px;
-}
-
-/* bouton */
-.btn {
-    display: block;
-    width: 200px;
-    margin: 600px auto;
-    text-align: center;
-    padding: 15px;
-
-    background: #ff4da6;
-    color: white;
-    text-decoration: none;
-
-    border-radius: 10px;
+    font-size: 22px;
+    color: #fff;
+    text-shadow: 0 0 10px #000;
 }
