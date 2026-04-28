@@ -1,47 +1,37 @@
-#  SAE : Attrape Souris docker-sae203
+# 🐭 Attrape Souris docker-sae203
 
-Bienvenue dans **Attrape Souris**, un jeu de labyrinthe où vous reprenez les commandes ! Ce projet démontre comment Java et Docker collaborent pour offrir une expérience de jeu portable et sécurisée.
+Un jeu de labyrinthe dynamique développé en **JavaScript** avec génération procédurale de niveaux et déploiement via **Docker**.
 
-##  Concept
+## 🌟 Points Forts Techniques
 
-Ce projet utilise la puissance de **Docker** pour encapsuler un moteur de jeu complet. 
+- **Génération Procédurale** : Utilisation d'un automate (Recursive Backtracker) pour créer des labyrinthes uniques et parfaits à l'infini.
+- **IA de Traque** : Les ennemis (Tom Nook) utilisent une logique de calcul de distance pour poursuivre le joueur.
+- **Difficulté Évolutive** : La taille du labyrinthe et le nombre d'ennemis augmentent automatiquement à chaque niveau réussi.
+- **Architecture Docker** : Le projet est entièrement containerisé avec Nginx pour un déploiement instantané.
 
-Contrairement aux versions précédentes où le mouvement était automatisé, cette version est **entièrement interactive**. L'intérêt technique réside dans la capacité de Docker à transmettre les entrées de votre clavier  et à renvoyer l'affichage graphique du conteneur vers votre écran en temps réel.
+## 🎮 Comment Jouer ?
 
-##  Objectif 
+1. Déplacez votre villageois avec les **flèches directionnelles** de votre clavier.
+2. Récupérez les **clochettes** 💰 pour augmenter votre score.
+3. Atteignez le **drapeau** 🏁 pour passer au niveau suivant (plus grand et plus dur).
+4. Attention ! Si **Tom Nook** 🐱 vous attrape, vous perdez vos clochettes et revenez au niveau 1.
 
-Incarnez le personnage **'P'** et traversez les méandres du labyrinthe pour capturer la souris située à la sortie **'S'**. Le jeu propose plusieurs niveaux de difficulté croissante.
+##  Lancer avec Docker
 
-##  L'équipe
+Assurez-vous d'avoir Docker installé, puis lancez les commandes suivantes à la racine du projet :
 
-* **Anjolaoluwa Sadiq**
-* **Alexis Bouffay**
-* **Samba Camara**
+# 1. Récupérer le projet
+```bash
+git clone https://github.com/anjosdq/jeuCode.git
+cd jeuCode
+```
 
-##  Structure du Projet
+# 2. Construire l'image
+```bash
+docker build -t attrape-souris .
+```
 
-L'architecture est simplifiée pour se concentrer sur l'exécution :
-
-1. **`src/Labyrinthe.java`** : Gère le moteur de jeu, les collisions et l'interface graphique Swing.
-2. **`Dockerfile`** : Configure l'environnement de compilation (Java UTF-8) et prépare l'exécution interactive.
-3. **`index.html`** : Page de présentation web du projet.
-
-##  Installation et Lancement
-
-### Prérequis
-* **Docker** installé et opérationnel.
-* Un serveur **X11** pour l'affichage.
-
-### Étapes à suivre
-
-1. **Récupérer le projet** :
-   ```bash
-   git clone git@github.com:anjosdq/jeuCode.git
-
-2.  **Autoriser l'affichage graphique** :
-   ```bash
-   xhost +local:docker
-   ```
-3.  **Lancer le jeu Attrape Souris** :
-   ```bash
-   docker-compose up --build 
+# 3. Lancer le container
+```bash
+docker run -d -p 8080:80 attrape-souris
+```
