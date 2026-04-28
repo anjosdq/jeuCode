@@ -6,7 +6,7 @@ Bienvenue dans **Attrape Souris**, un jeu de labyrinthe où vous reprenez les co
 
 Ce projet utilise la puissance de **Docker** pour encapsuler un moteur de jeu complet. 
 
-Contrairement aux versions précédentes où le mouvement était automatisé, cette version est **entièrement interactive**. L'intérêt technique réside dans la capacité de Docker à transmettre les entrées de votre clavier (touches directionnelles) et à renvoyer l'affichage graphique du conteneur vers votre écran en temps réel.
+Contrairement aux versions précédentes où le mouvement était automatisé, cette version est **entièrement interactive**. L'intérêt technique réside dans la capacité de Docker à transmettre les entrées de votre clavier  et à renvoyer l'affichage graphique du conteneur vers votre écran en temps réel.
 
 ##  Objectif 
 
@@ -37,14 +37,11 @@ L'architecture est simplifiée pour se concentrer sur l'exécution :
 1. **Récupérer le projet** :
    ```bash
    git clone git@github.com:anjosdq/jeuCode.git
-   cd jeuCode
-2. **Construire l'image (Compilation automatique)** :
-   ```bash
-   docker build -t jeucode .
-3.  **Autoriser l'affichage graphique** :
+
+2.  **Autoriser l'affichage graphique** :
    ```bash
    xhost +local:docker
    ```
-4.  **Lancer le défi Attrape Souris** :
+3.  **Lancer le jeu Attrape Souris** :
    ```bash
-   docker run -it --rm --env="DISPLAY" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" jeucode   
+   docker-compose up --build 
