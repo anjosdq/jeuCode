@@ -5,187 +5,126 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Arial Rounded MT Bold', 'Helvetica', sans-serif;
     
-    /* Fond assombri avec filtre 70% noir */
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+    /* Image de fond Animal Crossing avec filtre sombre pour la lisibilité */
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
                 url("background.jpg") no-repeat center center;
     background-size: cover;
     color: white;
+    overflow: hidden;
 }
 
-/* Animation néon pour le titre */
+
 @keyframes flicker {
     0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-        text-shadow: 0 0 10px #ff4da6, 0 0 20px #ff4da6, 0 0 40px #ff1a75;
+        text-shadow: 0 0 10px #ff4da6, 0 0 20px #ff4da6, 0 0 40px #ff1a75, 0 0 80px #ff1a75;
     }
     20%, 22%, 24%, 55% { text-shadow: none; }
 }
 
 .title {
     font-size: 60px;
-    color: #ff4da6;
+    color: #DB0EE6;
     text-align: center;
     animation: flicker 3s infinite alternate;
     letter-spacing: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
+    z-index: 2;
 }
 
-.content {
-    width: 80%;
-    max-width: 800px;
-    text-align: center;
-}
 
-.card {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    margin: 15px 0;
-    border-radius: 15px;
-    border: 1px solid #ff4da6;
-    backdrop-filter: blur(5px);
-}
-
-.card h2 {
-    color: #ff4da6;
-    margin-top: 0;
+.main-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
 }
 
 .btn {
     display: block;
     width: 250px;
     padding: 15px;
-    background-color: transparent;
+    background-color: rgba(255, 255, 255, 0.9);
     color: #ff4da6;
-    border: 2px solid #ff4da6;
+    border: 4px solid #ff4da6;
     text-decoration: none;
     font-weight: bold;
     text-transform: uppercase;
-    transition: 0.3s;
     border-radius: 50px;
     text-align: center;
-    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 0px #d43d89; 
 }
 
 .btn:hover {
     background-color: #ff4da6;
     color: white;
-    box-shadow: 0 0 20px #ff4da6;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 0px #b02a6b;
 }
+
 
 .github-icon {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 50px;
-    filter: invert(1); /* Pour mettre l'icône GitHub en blanc */
-    transition: 0.3s;
-}
-
-.github-icon:hover {
-    transform: rotate(360deg) scale(1.2);
-}
-
-code {
-    background: #222;
-    padding: 5px 10px;
-    border-radius: 5px;
-    color: #00ffcc;
-}/* --- Fond général --- */
-body {
-    margin: 0;
-    height: 100vh;
-
-    background: url("background.jpg") no-repeat center center;
-    background-size: cover;
-
-    /* Assombrissement + flou léger */
-    background-color: rgba(0, 0, 0, 0.45);
-    background-blend-mode: darken;
-    backdrop-filter: blur(2px);
-
-    font-family: "Trebuchet MS", sans-serif;
-}
-
-/* --- Titre principal --- */
-.title {
-    position: absolute;
-    top: 35%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    font-size: 70px;
-    color: #ff4da6;
-
-    text-align: center;
-    letter-spacing: 4px;
-
-    /* Effet néon amélioré */
-    text-shadow:
-        0 0 10px #ff4da6,
-        0 0 20px #ff4da6,
-        0 0 40px #ff1a75,
-        0 0 80px #ff1a75;
-
-    animation: pulse 2.5s infinite ease-in-out;
-}
-
-/* Animation douce du néon */
-@keyframes pulse {
-    0% { text-shadow: 0 0 10px #ff4da6, 0 0 20px #ff4da6, 0 0 40px #ff1a75; }
-    50% { text-shadow: 0 0 20px #ff4da6, 0 0 40px #ff1a75, 0 0 80px #ff1a75; }
-    100% { text-shadow: 0 0 10px #ff4da6, 0 0 20px #ff4da6, 0 0 40px #ff1a75; }
-}
-
-/* --- Icône GitHub --- */
-.github-icon {
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-
-    width: 65px;
+    width: 45px; 
     cursor: pointer;
-
-    filter: drop-shadow(0 0 5px #000);
-    transition: transform 0.3s, filter 0.3s;
+    filter: drop-shadow(0 0 5px rgba(255, 77, 166, 0.8));
+    
+  
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .github-icon:hover {
-    transform: scale(1.2);
-    filter: drop-shadow(0 0 10px #fff);
+    transform: scale(1.3) rotate(360deg); 
 }
 
-/* --- Bouton --- */
-.btn {
-    display: block;
-    width: 230px;
 
-    margin: 550px auto 0 auto;
+#maze {
+    display: grid;
+    gap: 3px;
+    background: rgba(255, 255, 255, 0.3);
     padding: 15px;
-
-    text-align: center;
-    text-decoration: none;
-
-    background: linear-gradient(135deg, #ff4da6, #ff1a75);
-    color: white;
-    font-size: 22px;
-
-    border-radius: 15px;
-    box-shadow: 0 0 10px #ff4da6aa;
-
-    transition: 0.3s;
+    border-radius: 20px;
+    border: 6px solid #ffffff;
+    backdrop-filter: blur(10px);
 }
 
-.btn:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0 20px #ff1a75cc;
+.cell {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    border-radius: 8px;
 }
 
-/* --- Texte éventuel sous le titre --- */
+.wall {
+    background: #78c2ad; 
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+}
+
+.exit {
+    background: #ffce67; 
+}
+
+
 .content {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 30px;
+    border-radius: 20px;
+    border: 2px solid #ff4da6;
+    max-width: 600px;
     text-align: center;
-    margin-top: 200px;
-    font-size: 22px;
-    color: #fff;
-    text-shadow: 0 0 10px #000;
+    backdrop-filter: blur(5px);
+}
+
+.content p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin: 15px 0;
 }
