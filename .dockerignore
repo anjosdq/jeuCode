@@ -1,0 +1,20 @@
+# Ignorer le dossier de configuration Git
+.git
+.gitignore
+
+# Ignorer la documentation qui n'est pas nécessaire au fonctionnement du jeu
+README.md
+LICENSE
+docs/
+
+# Ignorer les fichiers système
+.DS_Store
+Thumbs.db
+
+# Ignorer les fichiers de configuration d'IDE 
+.vscode/
+.idea/
+
+# Ignorer le Dockerfile lui-même
+Dockerfile
+.dockerignore
