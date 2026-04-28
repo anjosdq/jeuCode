@@ -1,10 +1,10 @@
-# On utilise l'image ultra-légère de Nginx
+# 1. Base ultra-légère
 FROM nginx:alpine
 
-# On copie tous les fichiers de notre projet dans le dossier que Nginx utilise pour servir le contenu
+# 2. Copie des fichiers (HTML, CSS, JS, Images)
 COPY . /usr/share/nginx/html/
 
-# On expose le port 80 
+# 3. Documentation du port
 EXPOSE 80
 
-# Nginx se lance automatiquement au démarrage du container
+CMD ["nginx", "-g", "daemon off;"]
