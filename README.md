@@ -46,5 +46,5 @@ L'architecture est simplifiée pour se concentrer sur l'exécution :
    xhost +local:docker
    ```
 4.  **Lancer le défi Attrape Souris** :
-    ```bash
-      docker run -it --rm --env="DISPLAY" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" jeucode   
+   ```bash
+   docker run -it --rm --env="DISPLAY" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" jeucode   
