@@ -2,40 +2,32 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Règles du Jeu</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Règles</title>
+    <link rel="stylesheet" href="jeu.css">
 </head>
-
 <body>
 
-    <main>
-        <h1 class="title">📜 Règles du Jeu</h1>
+    <h1 class="title" style="top: 15%;">Règles du jeu</h1>
 
-        <section>
-            <h2>🎮 Objectif</h2>
-            <p>
-                Vous incarnez <strong>'P'</strong>. Votre mission est d’atteindre la souris <strong>'S'</strong>
-                en traversant le labyrinthe sans toucher les murs.
-            </p>
-        </section>
+    <div class="content">
+        <div class="card">
+            <h2>🎮 But du jeu</h2>
+            <p>Incarnez le personnage <strong>'P'</strong> et attrapez la souris <strong>'S'</strong> avant qu'elle ne s'échappe du labyrinthe !</p>
+            </div>
 
-        <section>
+        <div class="card">
             <h2>⌨️ Contrôles</h2>
-            <ul>
-                <li>⬆️ Flèche du haut : avancer</li>
-                <li>⬇️ Flèche du bas : reculer</li>
-                <li>⬅️ Flèche gauche : aller à gauche</li>
-                <li>➡️ Flèche droite : aller à droite</li>
-            </ul>
-        </section>
+            <p>Utilisez les <strong>flèches directionnelles</strong> de votre clavier pour vous déplacer en temps réel.</p>
+        </div>
 
-        <section>
-            <h2>🐭 Victoire</h2>
-            <p>Vous gagnez lorsque vous atteignez la case <strong>'S'</strong>.</p>
-        </section>
+        <div class="card">
+            <h2>🐳 Technologie Docker</h2>
+            <p>Le jeu est entièrement conteneurisé. <br> 
+               Commande de lancement : <code>docker-compose up --build</code></p>
+            </div>
 
-        <a href="index.html" class="btn">🏠 Retour</a>
-    </main>
+        <a href="index.html" class="btn" style="margin: 30px auto;">⬅ Retour</a>
+    </div>
 
 </body>
 </html>
