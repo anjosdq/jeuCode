@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attrape Souris - Docker</title>
+    <link rel="stylesheet" href="jeu.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .docker-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Fil d'Ariane */
+        .breadcrumb {
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,77,166,0.4);
+        }
+
+        .breadcrumb a {
+            color: #ff4da6;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: white;
+        }
+
+        /* Navigation */
+        .docker-nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0 30px 0;
+            padding: 15px 0;
+            border-bottom: 2px solid rgba(255,77,166,0.3);
+            flex-wrap: wrap;
+        }
+
+        .docker-nav .btn {
+            padding: 12px 28px;
+            background: rgba(0,0,0,0.6);
+            border: 2px solid #ff4da6;
+            color: white;
+            text-decoration: none;
+            border-radius: 40px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .docker-nav .btn:hover {
+            background: #ff4da6;
+            transform: translateY(-2px);
+        }
+
+        .docker-nav .btn-active {
+            background: #ff4da6;
+            color: white;
+        }
+
+        /* Cartes */
+        .card {
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            color: #ff4da6;
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            color: #ffce67;
+            margin: 15px 0 10px 0;
+        }
+
+        .card p {
+            color: rgba(255,255,255,0.9);
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: #1e1e2e;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            border-left: 4px solid #ff4da6;
+        }
+
+        .code-block pre {
+            color: #cdd6f4;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .command {
+            background: #0f0f1a;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            margin: 10px 0;
+            border: 1px solid #ff4da6;
+            color: #cdd6f4;
+        }
+
+        .command span {
+            color: #ff4da6;
+        }
+
+        .list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            gap: 12px;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .list-number {
+            background: #ff4da6;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .tree {
+            background: rgba(0,0,0,0.4);
+            border-radius: 12px;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            overflow-x: auto;
+        }
+
+        .btn-footer {
+            display: inline-block;
+            background: #ff4da6;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: 0.2s;
+        }
+
+        .btn-footer:hover {
+            transform: scale(1.05);
+        }
+
+        hr {
+            border-color: rgba(255,255,255,0.2);
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="docker-container">
+        <!-- Fil d'Ariane -->
+        <div class="breadcrumb">
+            📍 <a href="index.html">Accueil</a> <span>/</span> <a href="docker.html">Docker</a> <span>/</span> <span style="color:#ff4da6;">🐳 Containerisation</span>
+        </div>
+
+        <!-- Navigation -->
+        <div class="docker-nav">
+            <a href="index.html" class="btn">🏠 Accueil</a>
+            <a href="jeu.html" class="btn">🎮 Jouer</a>
+            <a href="regles.html" class="btn">📜 Règles</a>
+            <a href="docker.html" class="btn btn-active">🐳 Docker</a>
+        </div>
+
+        <h1 class="title">🐳 Docker & Containerisation</h1>
+
+        <!-- Dockerfile -->
+        <div class="card">
+            <h2>📄 Dockerfile</h2>
+            <p>Voici le contenu du fichier <strong>Dockerfile</strong> utilisé pour conteneuriser l'application :</p>
+            
+            <div class="code-block">
+                <pre># 1. Base ultra-légère
+FROM nginx:alpine
+
+# 2. Copie des fichiers (HTML, CSS, Images)
+COPY . /usr/share/nginx/html/
+
+# 3. Documentation du port
+EXPOSE 80
+
+# 4. Lancement du serveur
+CMD ["nginx", "-g", "daemon off;"]</pre>
+            </div>
+
+            <h3>🔍 Explication des instructions :</h3>
+            <ul class="list">
+                <li><span class="list-number">1</span> <strong>FROM nginx:alpine</strong> - Image Nginx basée sur Alpine Linux (très légère, ~5MB)</li>
+                <li><span class="list-number">2</span> <strong>COPY . /usr/share/nginx/html/</strong> - Copie tous les fichiers du projet dans le dossier web de Nginx</li>
+                <li><span class="list-number">3</span> <strong>EXPOSE 80</strong> - Le conteneur écoutera sur le port 80</li>
+                <li><span class="list-number">4</span> <strong>CMD</strong> - Lance Nginx en mode premier plan (indispensable pour Docker)</li>
+            </ul>
+        </div>
+
+        <!-- Structure du projet -->
+        <div class="card">
+            <h2>📁 Structure du projet</h2>
+            <p>Arborescence des fichiers inclus dans l'image Docker :</p>
+            <div class="tree">
+                <pre>
+📂 projet-jeu/
+├── 🐳 Dockerfile
+├── 📄 .dockerignore
+├── 📖 README.md
+├── 🖼️ background.jpg
+├── 🐙 github.png
+├── 🌐 index.html
+├── 🎨 jeu.css
+├── 🎮 jeu.html
+├── 📜 regles.html
+└── 🐳 docker.html
+                </pre>
+            </div>
+        </div>
+
+        <!-- Commandes Docker -->
+        <div class="card">
+            <h2>⚙️ Commandes Docker</h2>
+            <p>Pour construire et exécuter le jeu :</p>
+            
+            <div class="command">
+                <span>$</span> docker build -t attrape-souris .
+            </div>
+            <div class="command">
+                <span>$</span> docker run -d -p 8080:80 --name jeu-souris attrape-souris
+            </div>
+            
+            <p>✅ Le jeu est alors accessible sur : <strong style="color:#ffce67;">http://localhost:8080</strong></p>
+            
+            <h3>📋 Autres commandes utiles :</h3>
+            <div class="command"><span>$</span> docker ps                 # Voir les conteneurs actifs</div>
+            <div class="command"><span>$</span> docker stop jeu-souris    # Arrêter le conteneur</div>
+            <div class="command"><span>$</span> docker start jeu-souris   # Redémarrer le conteneur</div>
+            <div class="command"><span>$</span> docker rm jeu-souris      # Supprimer le conteneur</div>
+        </div>
+
+        <!-- Docker Compose -->
+        <div class="card">
+            <h2>🐳 Docker Compose</h2>
+            <p>Alternative plus simple avec <strong>docker-compose.yml</strong> :</p>
+            
+            <div class="code-block">
+                <pre>version: '3.8'
+services:
+  jeu:
+    build: .
+    ports:
+      - "8080:80"
+    container_name: attrape-souris</pre>
+            </div>
+            
+            <div class="command"><span>$</span> docker-compose up --build</div>
+            <div class="command"><span>$</span> docker-compose down</div>
+        </div>
+
+        <!-- Avantages -->
+        <div class="card">
+            <h2>✅ Avantages de la containerisation</h2>
+            <ul class="list">
+                <li><span style="background:#2e8b57;">🎯</span> <strong>Portabilité</strong> - Fonctionne sur Linux, macOS et Windows</li>
+                <li><span style="background:#2e8b57;">🚀</span> <strong>Léger</strong> - Image Alpine Linux extrêmement compacte</li>
+                <li><span style="background:#2e8b57;">🔒</span> <strong>Isolation</strong> - Environnement sécurisé et isolé</li>
+                <li><span style="background:#2e8b57;">📦</span> <strong>Déploiement simple</strong> - Une commande suffit</li>
+                <li><span style="background:#2e8b57;">🔄</span> <strong>Reproductibilité</strong> - Même environnement partout</li>
+            </ul>
+        </div>
+
+        <!-- .dockerignore -->
+        <div class="card">
+            <h2>📄 .dockerignore</h2>
+            <p>Fichier pour exclure les fichiers inutiles et alléger l'image :</p>
+            <div class="code-block">
+                <pre>.git/
+README.md
+*.md
+.DS_Store</pre>
+            </div>
+            <p>⏩ Résultat : image <strong>plus rapide</strong> à builder et <strong>plus petite</strong> !</p>
+        </div>
+
+        <!-- Retour -->
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="index.html" class="btn-footer">⬅ Retour à l'accueil</a>
+        </div>
+    </div>
+
+</body>
+</html>
