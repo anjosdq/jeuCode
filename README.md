@@ -1,43 +1,50 @@
-# SAE : Labyrinthe Code-Java docker-sae203
+#  SAE : Attrape Souris Labyrinthe Interactif
 
-Bienvenue dans ce projet de labyrinthe où la victoire ne dépend pas de vos réflexes, mais de votre capacité à **coder** !
+Bienvenue dans **Attrape Souris**, un jeu de labyrinthe où vous reprenez les commandes ! Ce projet démontre comment Java et Docker collaborent pour offrir une expérience de jeu portable et sécurisée.
 
-## Concept
+##  Concept
 
-Ce projet est un environnement de simulation. Contrairement à un jeu classique, vous ne contrôlez pas le personnage avec le clavier. Vous devez **implémenter un algorithme de résolution** dans une classe Java. 
+Ce projet utilise la puissance de **Docker** pour encapsuler un moteur de jeu complet. 
 
-Votre code est ensuite implémenter, compilé et exécuté à l'intérieur d'un conteneur **Docker** qui fait tourner le moteur de jeu. C'est une excellente démonstration de la portabilité de Java combinée à la puissance d'isolation de Docker. 
+Contrairement aux versions précédentes où le mouvement était automatisé, cette version est **entièrement interactive**. L'intérêt technique réside dans la capacité de Docker à transmettre les entrées de votre clavier (touches directionnelles) et à renvoyer l'affichage graphique du conteneur vers votre écran en temps réel.
 
-## Objectif 
+##  Objectif 
 
-Le programme du Labyrinthe  enchaîne automatiquement 3 niveaux de difficulté croissante. Votre classe Joueur.java doit être capable de trouver la sortie 'S' dans chaque configuration.
+Incarnez le personnage **'P'** et traversez les méandres du labyrinthe pour capturer la souris située à la sortie **'S'**. Le jeu propose plusieurs niveaux de difficulté croissante.
 
-## L'équipe
+##  L'équipe
 
-* **Équipier 1** : Anjolaoluwa Sadiq
-* **Équipier 2** : Alexis Bouffay
-* **Équipier 3** : Samba Camara
+* **Anjolaoluwa Sadiq**
+* **Alexis Bouffay**
+* **Samba Camara**
 
+##  Structure du Projet
 
-## Structure du Projet
+L'architecture est simplifiée pour se concentrer sur l'exécution :
 
-L'architecture est séparée en trois parties distinctes :
+1. **`src/Labyrinthe.java`** : Gère le moteur de jeu, les collisions et l'interface graphique Swing.
+2. **`Dockerfile`** : Configure l'environnement de compilation (Java UTF-8) et prépare l'exécution interactive.
+3. **`index.html`** : Page de présentation web du projet.
 
-1.  **`src/Labyrinthe.java`** : Le cœur du système. Il gère la carte, vérifie les collisions et gère la boucle de rendu en console.
-2.  **`src/Joueur.java`** : C'est votre espace de travail. Vous devez modifier la méthode `deplacer()` pour guider le personnage 'P' vers la sortie 'S'.
-3.  **`Dockerfile`** : La recette de cuisine qui définit l'environnement Linux/Java nécessaire pour compiler et lancer le défi.
-
-## Installation et Lancement
+##  Installation et Lancement
 
 ### Prérequis
-* Docker Desktop installé et lancé.
+* **Docker** installé et opérationnel.
+* Un serveur **X11** pour l'affichage (standard sur Linux, via XQuartz sur Mac ou WSLg sur Windows).
 
 ### Étapes à suivre
 
-1. **Modifiez le fichier `src/Joueur.java`** sur votre machine hôte avec votre logique de déplacement.
-2. **Construisez l'image** (cette étape compile votre code Java à l'intérieur du conteneur) :
+1. **Récupérer le projet** :
    ```bash
-   docker build -t jeuCode .
-3. **Pour lancer le jeu :**
+   git clone git@github.com:anjosdq/jeuCode.git
+   cd jeuCode
+2. **Construire l'image (Compilation automatique)** :
    ```bash
-   docker run -it --rm jeucode
+   docker build -t jeucode .
+3.  **Autoriser l'affichage graphique** :
+   ```bash
+   xhost +local:docker
+   ```
+4.  **Lancer le défi Attrape Souris** :
+    ```bash
+      docker run -it --rm --env="DISPLAY" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" jeucode   
