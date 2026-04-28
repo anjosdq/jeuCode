@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-public class LabyrintheGUI extends JFrame {
+public class Labyrinthe extends JFrame {
 
     int x, y;
     int niveau = 0;
@@ -33,7 +33,7 @@ public class LabyrintheGUI extends JFrame {
     JTextArea zoneCode;
     JPanel panel;
 
-    public LabyrintheGUI() {
+    public Labyrinthe() {
 
         setTitle("Labyrinthe");
         setSize(600,600);
