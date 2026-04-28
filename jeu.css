@@ -1,4 +1,97 @@
-/* --- Fond général --- */
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    /* Fond assombri avec filtre 70% noir */
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                url("background.jpg") no-repeat center center;
+    background-size: cover;
+    color: white;
+}
+
+/* Animation néon pour le titre */
+@keyframes flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        text-shadow: 0 0 10px #ff4da6, 0 0 20px #ff4da6, 0 0 40px #ff1a75;
+    }
+    20%, 22%, 24%, 55% { text-shadow: none; }
+}
+
+.title {
+    font-size: 60px;
+    color: #ff4da6;
+    text-align: center;
+    animation: flicker 3s infinite alternate;
+    letter-spacing: 5px;
+    margin-bottom: 20px;
+}
+
+.content {
+    width: 80%;
+    max-width: 800px;
+    text-align: center;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 15px;
+    border: 1px solid #ff4da6;
+    backdrop-filter: blur(5px);
+}
+
+.card h2 {
+    color: #ff4da6;
+    margin-top: 0;
+}
+
+.btn {
+    display: block;
+    width: 250px;
+    padding: 15px;
+    background-color: transparent;
+    color: #ff4da6;
+    border: 2px solid #ff4da6;
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.3s;
+    border-radius: 50px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #ff4da6;
+    color: white;
+    box-shadow: 0 0 20px #ff4da6;
+}
+
+.github-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    filter: invert(1); /* Pour mettre l'icône GitHub en blanc */
+    transition: 0.3s;
+}
+
+.github-icon:hover {
+    transform: rotate(360deg) scale(1.2);
+}
+
+code {
+    background: #222;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #00ffcc;
+}/* --- Fond général --- */
 body {
     margin: 0;
     height: 100vh;
