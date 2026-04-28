@@ -1,20 +1,10 @@
-FROM openjdk:25-jdk-slim
+# On utilise l'image ultra-légère de Nginx
+FROM nginx:alpine
 
-#  Installation des bibliothèques pour l'affichage graphique
-RUN apt-get update && apt-get install -y \
-    libxext6 \
-    libxrender1 \
-    libxtst6 \
-    libxi6 \
-    && rm -rf /var/lib/apt/lists/*
+# On copie tous les fichiers de notre projet dans le dossier que Nginx utilise pour servir le contenu
+COPY . /usr/share/nginx/html/
 
-WORKDIR /app
+# On expose le port 80 
+EXPOSE 80
 
-# On copie tout le contenu du dossier src
-COPY src/ .
-
-# On compile 
-RUN javac *.java
-
-# Lancement du jeu
-CMD ["java", "Labyrinthe"]
+# Nginx se lance automatiquement au démarrage du container
