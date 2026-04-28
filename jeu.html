@@ -2,143 +2,254 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Attrape Souris - Générateur Aléatoire</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Attrape Souris - Jeu</title>
     <link rel="stylesheet" href="jeu.css">
     <style>
-        /* Styles supplémentaires pour garantir que les boutons restent visibles */
-        #game-container { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            width: 100%;
-            min-height: 100vh;
+        /* Styles du jeu */
+        .game-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
-        
-        #maze { 
-            display: grid; 
-            gap: 2px; 
-            background: #444; 
-            border: 5px solid #ff4da6; 
-            padding: 5px; 
+
+        /* Fil d'Ariane */
+        .breadcrumb {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            z-index: 100;
+            border: 1px solid rgba(255,77,166,0.4);
+        }
+
+        .breadcrumb a {
+            color: #ff4da6;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: white;
+        }
+
+        /* Barre de navigation */
+        .game-nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            margin-top: 20px;
+            padding: 10px 0;
+            border-bottom: 2px solid rgba(255,77,166,0.3);
+        }
+
+        .game-nav .btn {
+            margin: 0;
+            padding: 10px 25px;
+            background: rgba(0,0,0,0.6);
+            border: 2px solid #ff4da6;
+            color: white;
+        }
+
+        .game-nav .btn:hover {
+            background: #ff4da6;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Panneau de score */
+        .score-panel {
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            padding: 15px 30px;
+            text-align: center;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,77,166,0.5);
+        }
+
+        .score-panel h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        .score-panel span {
+            color: #ff4da6;
+            font-weight: bold;
+            font-size: 1.8rem;
+        }
+
+        .level-badge {
+            display: inline-block;
+            background: #ff4da6;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+
+        /* Conteneur du labyrinthe avec scroll */
+        .maze-container {
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 65vh;
+            display: flex;
+            justify-content: center;
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            padding: 20px;
+        }
+
+        #maze {
+            display: grid;
+            gap: 3px;
+            background: #2a2a2a;
+            padding: 10px;
             border-radius: 15px;
-            margin: 20px auto;
+            margin: 0 auto;
         }
-        
-        .cell { 
-            width: 50px; 
-            height: 50px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 30px; 
-            background: white; 
-            border-radius: 8px; 
-            transition: all 0.1s ease; 
+
+        .cell {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            transition: all 0.08s linear;
         }
-        
-        .wall { 
-            background: #78c2ad; 
-            box-shadow: inset 0 0 8px rgba(0,0,0,0.2); 
+
+        .wall {
+            background: #5a9e7e;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
         }
-        
-        .exit { 
-            background: #ffce67; 
+
+        .exit {
+            background: #ffce67;
         }
-        
-        #ui { 
-            margin-top: 20px; 
-            text-align: center; 
-            color: white; 
-            background: rgba(0,0,0,0.5); 
-            padding: 10px 20px; 
-            border-radius: 30px; 
-            backdrop-filter: blur(5px);
-            z-index: 10;
+
+        /* Contrôles */
+        .controls-info {
+            text-align: center;
+            margin: 25px 0 15px;
+            padding: 12px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 40px;
         }
-        
-        .main-nav { 
-            margin-top: 20px; 
-            text-align: center; 
-            width: 100%;
-            z-index: 10;
-            position: relative;
+
+        .controls-info p {
+            margin: 0;
+            color: white;
+            font-weight: bold;
         }
-        
-        .btn { 
-            background: rgba(255,255,255,0.9); 
-            color: #ff4da6; 
-            border: 3px solid #ff4da6; 
-            padding: 10px 25px; 
-            border-radius: 40px; 
-            text-decoration: none; 
-            font-weight: bold; 
-            transition: 0.2s; 
-            display: inline-block; 
-            margin: 5px 10px; 
-            cursor: pointer;
-            font-family: inherit;
+
+        .arrow-keys {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            padding: 5px 12px;
+            border-radius: 30px;
+            margin-top: 8px;
         }
-        
-        .btn:hover { 
-            background: #ff4da6; 
-            color: white; 
-            transform: scale(1.05); 
+
+        .arrow-keys span {
+            display: inline-block;
+            background: rgba(0,0,0,0.6);
+            padding: 5px 12px;
+            margin: 0 3px;
+            border-radius: 10px;
+            font-size: 1.1rem;
         }
-        
-        .btn-retour { 
-            background: rgba(255,255,255,0.9); 
-            color: #666; 
-            border-color: #999; 
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .cell {
+                width: 40px;
+                height: 40px;
+                font-size: 24px;
+            }
+            
+            .score-panel h2 {
+                font-size: 1.2rem;
+            }
+            
+            .score-panel span {
+                font-size: 1.4rem;
+            }
+
+            .breadcrumb {
+                font-size: 0.7rem;
+                padding: 5px 12px;
+                top: 10px;
+                left: 10px;
+            }
         }
-        
-        .btn-retour:hover { 
-            background: #999; 
-            color: white; 
-            border-color: #999; 
-        }
-        
-        .info-message { 
-            color: #ffcc00; 
-            font-size: 0.9rem; 
-            margin-top: 10px; 
-            text-shadow: 1px 1px 0 black; 
-        }
-        
-        .button-group { 
-            display: flex; 
-            justify-content: center; 
-            gap: 15px; 
-            margin-top: 10px; 
-            flex-wrap: wrap; 
-        }
-        
-        /* Protection contre la disparition des boutons */
-        .main-nav .btn,
-        .button-group .btn {
-            opacity: 1 !important;
-            visibility: visible !important;
-            display: inline-block !important;
+
+        @media (max-width: 550px) {
+            .cell {
+                width: 35px;
+                height: 35px;
+                font-size: 20px;
+            }
+            
+            .game-nav {
+                gap: 10px;
+            }
+            
+            .game-nav .btn {
+                padding: 8px 18px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
 
-    <h1 class="title">🐭 Attrape Souris 🐱</h1>
+    <!-- Fil d'Ariane -->
+    <div class="breadcrumb">
+        📍 <a href="index.html">Accueil</a> <span>/</span> <a href="jeu.html">Jeu</a> <span>/</span> <span style="color:#ff4da6;">🎮 En jeu</span>
+    </div>
 
-    <div id="game-container">
-        <div id="ui">
-            <h2>🏆 Niveau : <span id="lvl-display">1</span> | 🧀 Score : <span id="score-display">0</span></h2>
-            <p class="info-message">✨ Génération aléatoire à chaque niveau ✨</p>
+    <div class="game-wrapper">
+        <!-- Barre de navigation -->
+        <div class="game-nav">
+            <a href="index.html" class="btn">🏠 Accueil</a>
+            <a href="regles.html" class="btn">📜 Règles</a>
+            <button id="reset-game-btn" class="btn">🔄 Nouvelle partie</button>
         </div>
-        
-        <div id="maze"></div>
 
-        <div class="main-nav">
-            <p style="color: #ff4da6; font-weight: bold;">⬆️ ⬇️ ⬅️ ➡️  -  Évite le chat et attrape la souris !</p>
-            <div class="button-group" id="button-group">
-                <a href="index.html" class="btn btn-retour" id="back-home">🏠 Retour à l'Accueil</a>
-                <button id="reset-game" class="btn">🔄 Nouvelle Partie</button>
+        <!-- Panneau score -->
+        <div class="score-panel">
+            <h2>🏆 NIVEAU <span id="lvl-display">1</span> &nbsp;|&nbsp; 🧀 SCORE <span id="score-display">0</span></h2>
+            <div class="level-badge">✨ Labyrinthe aléatoire ✨</div>
+        </div>
+
+        <!-- Labyrinthe -->
+        <div class="maze-container">
+            <div id="maze"></div>
+        </div>
+
+        <!-- Contrôles -->
+        <div class="controls-info">
+            <p>🎮 DÉPLACEMENTS</p>
+            <div class="arrow-keys">
+                <span>⬆️</span>
+                <span>⬇️</span>
+                <span>⬅️</span>
+                <span>➡️</span>
             </div>
+            <p style="font-size: 0.85rem; margin-top: 8px;">Évite le chat 🐱 et atteins le drapeau 🏁</p>
         </div>
     </div>
 
@@ -347,7 +458,7 @@
         function draw() {
             const mazeDiv = document.getElementById('maze');
             if (!grid.length) return;
-            mazeDiv.style.gridTemplateColumns = `repeat(${grid[0].length}, 50px)`;
+            mazeDiv.style.gridTemplateColumns = `repeat(${grid[0].length}, 48px)`;
             mazeDiv.innerHTML = '';
             
             for (let r = 0; r < grid.length; r++) {
@@ -368,8 +479,6 @@
                         content = '🧀';
                     } else if (grid[r][c] === 'C') {
                         content = '🐱';
-                    } else if (grid[r][c] === '.') {
-                        content = '';
                     }
                     
                     if (r === playerPos.r && c === playerPos.c) {
@@ -389,7 +498,7 @@
                     if (!isWall && !(r === playerPos.r && c === playerPos.c) && !cats.some(cat => cat.r === r && cat.c === c) && grid[r][c] !== 'S' && grid[r][c] !== 'M') {
                         cell.style.background = 'rgba(255,255,240,0.9)';
                     } else if (isWall) {
-                        cell.style.background = '#78c2ad';
+                        cell.style.background = '#5a9e7e';
                     } else if (grid[r][c] === 'S') {
                         cell.style.background = '#ffce67';
                     }
@@ -486,7 +595,7 @@
         
         function checkCollision() {
             if (cats.some(cat => cat.r === playerPos.r && cat.c === playerPos.c)) {
-                alert("😿 Le chat vous a attrapé ! Retour au début du niveau... 😿");
+                alert("😿 Le chat vous a attrapé ! Retour au début du niveau...");
                 initLevel();
                 return true;
             }
@@ -510,7 +619,7 @@
             }
             
             if (grid[nr][nc] === 'S') {
-                alert(`🎉 Niveau ${currentLevel+1} réussi ! +10 points bonus ! 🎉`);
+                alert(`🎉 Niveau ${currentLevel+1} réussi ! +10 points bonus !`);
                 score += 10;
                 currentLevel++;
                 initLevel();
@@ -558,11 +667,10 @@
             e.preventDefault();
         });
         
-        // Vérifier que les boutons existent avant d'ajouter l'événement
-        const resetBtn = document.getElementById('reset-game');
+        const resetBtn = document.getElementById('reset-game-btn');
         if (resetBtn) {
             resetBtn.addEventListener('click', () => {
-                if (confirm("🔄 Voulez-vous vraiment recommencer une nouvelle partie ? Votre progression actuelle sera perdue.")) {
+                if (confirm("🔄 Recommencer une nouvelle partie ? Votre progression sera perdue.")) {
                     resetGame();
                 }
             });
