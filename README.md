@@ -30,7 +30,7 @@ L'architecture est simplifiée pour se concentrer sur l'exécution :
 
 ### Prérequis
 * **Docker** installé et opérationnel.
-* Un serveur **X11** pour l'affichage (standard sur Linux, via XQuartz sur Mac ou WSLg sur Windows).
+* Un serveur **X11** pour l'affichage.
 
 ### Étapes à suivre
 
