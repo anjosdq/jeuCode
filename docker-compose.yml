@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  jeu:
+    build: .
+    image: jeucode
+    container_name: attrape-souris
+    network_mode: host
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    stdin_open: true
+    tty: true
