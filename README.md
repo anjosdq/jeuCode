@@ -1,4 +1,4 @@
-#  SAE : Attrape Souris Labyrinthe Interactif
+#  SAE : Attrape Souris docker-sae203
 
 Bienvenue dans **Attrape Souris**, un jeu de labyrinthe où vous reprenez les commandes ! Ce projet démontre comment Java et Docker collaborent pour offrir une expérience de jeu portable et sécurisée.
 
